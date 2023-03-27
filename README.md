@@ -1,6 +1,6 @@
 # Wicked Dashboard using Astro + React + WickedAPI
 
-**The objective of this project is to allow for an easy way to modify a WordPress Database using our custom-built WickedAPI. In conjuction with the GP Populate Anything plugin from GravityWiz, it's used to update dropdown fields dynamically so that the options are always up-to-date.**
+**The objective of this project is to allow for an easy way to modify a WordPress Database using our custom-built `WickedAPI`. In conjuction with the GP Populate Anything plugin from GravityWiz, it's used to update dropdown fields dynamically so that the options are always up-to-date.**
 
 # Current dependencies
 
