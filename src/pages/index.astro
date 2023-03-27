@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
-import Switch from '../components/Switch.tsx'
+import Switch from '../components/Switch.tsx';
+import Table from '../components/Table.tsx';
 ---
 
 <Layout title="Wicked Dashboard">
@@ -38,7 +39,10 @@ import Switch from '../components/Switch.tsx'
 			/>
 		</ul>
 		<div>
-		<Switch />
+		<Switch client:load />
+		</div>
+		<div>
+		<Table client:load />
 		</div>
 	</main>
 </Layout>
