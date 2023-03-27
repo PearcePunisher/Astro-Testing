@@ -8,4 +8,6 @@
 
 > Where most icons & components come from. Examples include: Table, Switch, some styling (see their styling section)
 
-_Tailwind is installed, but not in use as of Mar 27, 2023. Might change later._
+[Tailwind CSS](https://tailwindcss.com/docs/installation)
+
+> _Tailwind is installed, but not in use as of Mar 27, 2023. Might change later._
