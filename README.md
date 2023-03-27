@@ -4,7 +4,15 @@
 
 _I do NOT have the slightest clue what I'm doing. I'm straight up winging this, so please don't judge too harsly._
 
-# Current dependencies
+# Current dependencies / Frameworks
+
+[Astro](https://docs.astro.build/en/getting-started/)
+
+> Primary Web Framework
+
+[React](https://legacy.reactjs.org/docs/getting-started.html)
+
+> Need I say more?
 
 [Material UI](https://mui.com/material-ui/getting-started/overview/)
 
