@@ -2,7 +2,7 @@
 
 **The objective of this project is to allow for an easy way to modify a WordPress Database using our custom-built `WickedAPI`. In conjuction with the GP Populate Anything plugin from GravityWiz, it's used to update dropdown fields dynamically so that the options are always up-to-date.**
 
-_I do NOT have the slightest clue what I'm doing. I'm straight up winging this, so please don't judge too harsly._
+_I haven't the slightest clue what I'm doing. I'm straight up winging this, so please don't judge too harsly <3._
 
 # Current dependencies / Frameworks
 
