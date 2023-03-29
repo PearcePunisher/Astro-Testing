@@ -48,6 +48,16 @@ const rows = [
   createData('Oreo', 437, 18.0, 63, 4.0),
 ];
 
+function hydrateRowsData(){
+
+  //must connect to the DB
+  // form the appropriate query
+  //process response
+  // format in to json
+  // populate rows
+}
+
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
