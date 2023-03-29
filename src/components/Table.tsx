@@ -61,6 +61,13 @@ const rows = [
   createData('88.1', 437, 18.0, 63, 4.0),
 ];
 
+function popultateRows(){
+  //this function  must populate the rows variable with the rows we wish to display. 
+  //rows cannot be a const with this. 
+  
+}
+
+
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
