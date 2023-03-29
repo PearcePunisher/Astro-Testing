@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -21,21 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
-interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
-}
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
+function createData(name, calories, fat, carbs, protein) {
   return {
     name,
     calories,
@@ -46,22 +33,22 @@ function createData(
 }
 
 const rows = [
-  createData('107.9', 305, 3.7, 67, 4.3),
-  createData('94.3', 452, 25.0, 51, 4.9),
-  createData('103.9', 262, 16.0, 24, 6.0),
-  createData('95.1', 159, 6.0, 24, 4.0),
-  createData('98.9', 356, 16.0, 49, 3.9),
-  createData('100.7', 408, 3.2, 87, 6.5),
-  createData('105.9', 237, 9.0, 37, 4.3),
-  createData('92.5', 375, 0.0, 94, 0.0),
-  createData('92.9', 518, 26.0, 65, 7.0),
-  createData('88.7', 392, 0.2, 98, 0.0),
-  createData('98.5', 318, 0, 81, 2.0),
-  createData('89.3', 360, 19.0, 9, 37.0),
-  createData('88.1', 437, 18.0, 63, 4.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Donut', 452, 25.0, 51, 4.9),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Honeycomb', 408, 3.2, 87, 6.5),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Jelly Bean', 375, 0.0, 94, 0.0),
+  createData('KitKat', 518, 26.0, 65, 7.0),
+  createData('Lollipop', 392, 0.2, 98, 0.0),
+  createData('Marshmallow', 318, 0, 81, 2.0),
+  createData('Nougat', 360, 19.0, 9, 37.0),
+  createData('Oreo', 437, 18.0, 63, 4.0),
 ];
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -71,15 +58,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type Order = 'asc' | 'desc';
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
+function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -89,11 +68,8 @@ function getComparator<Key extends keyof any>(
 // stableSort() brings sort stability to non-modern browsers (notably IE11). If you
 // only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
 // with exampleArray.slice().sort(exampleComparator)
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
@@ -104,71 +80,49 @@ function stableSort<T>(
   return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells = [
   {
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Station call number',
+    label: 'Dessert (100g serving)',
   },
   {
     id: 'calories',
     numeric: true,
     disablePadding: false,
-    label: 'Colorado Springs',
+    label: 'Calories',
   },
   {
     id: 'fat',
     numeric: true,
     disablePadding: false,
-    label: 'Ft. Collins',
+    label: 'Fat (g)',
   },
   {
     id: 'carbs',
     numeric: true,
     disablePadding: false,
-    label: 'North Denver',
+    label: 'Carbs (g)',
   },
   {
     id: 'protein',
     numeric: true,
     disablePadding: false,
-    label: 'Castle Rock',
+    label: 'Protein (g)',
   },
 ];
 
-interface EnhancedTableProps {
-  numSelected: number;
-  onRequestSort: (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-}
+const DEFAULT_ORDER = 'asc';
+const DEFAULT_ORDER_BY = 'calories';
+const DEFAULT_ROWS_PER_PAGE = 5;
 
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
+function EnhancedTableHead(props) {
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    props;
+  const createSortHandler = (newOrderBy) => (event) => {
+    onRequestSort(event, newOrderBy);
+  };
 
   return (
     <TableHead>
@@ -210,11 +164,16 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+function EnhancedTableToolbar(props) {
   const { numSelected } = props;
 
   return (
@@ -224,10 +183,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
+            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
@@ -247,9 +203,10 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Media Sources
+          Nutrition
         </Typography>
       )}
+
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -267,24 +224,53 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
+EnhancedTableToolbar.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+};
+
 export default function EnhancedTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [order, setOrder] = React.useState(DEFAULT_ORDER);
+  const [orderBy, setOrderBy] = React.useState(DEFAULT_ORDER_BY);
+  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [visibleRows, setVisibleRows] = React.useState(null);
+  const [rowsPerPage, setRowsPerPage] = React.useState(DEFAULT_ROWS_PER_PAGE);
+  const [paddingHeight, setPaddingHeight] = React.useState(0);
 
-  const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data
-  ) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  React.useEffect(() => {
+    let rowsOnMount = stableSort(
+      rows,
+      getComparator(DEFAULT_ORDER, DEFAULT_ORDER_BY),
+    );
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    rowsOnMount = rowsOnMount.slice(
+      0 * DEFAULT_ROWS_PER_PAGE,
+      0 * DEFAULT_ROWS_PER_PAGE + DEFAULT_ROWS_PER_PAGE,
+    );
+
+    setVisibleRows(rowsOnMount);
+  }, []);
+
+  const handleRequestSort = React.useCallback(
+    (event, newOrderBy) => {
+      const isAsc = orderBy === newOrderBy && order === 'asc';
+      const toggledOrder = isAsc ? 'desc' : 'asc';
+      setOrder(toggledOrder);
+      setOrderBy(newOrderBy);
+
+      const sortedRows = stableSort(rows, getComparator(toggledOrder, newOrderBy));
+      const updatedRows = sortedRows.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      );
+
+      setVisibleRows(updatedRows);
+    },
+    [order, orderBy, page, rowsPerPage],
+  );
+
+  const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.name);
       setSelected(newSelected);
@@ -293,9 +279,9 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+  const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+    let newSelected = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -306,33 +292,61 @@ export default function EnhancedTable() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selected.slice(selectedIndex + 1),
       );
     }
 
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  const handleChangePage = React.useCallback(
+    (event, newPage) => {
+      setPage(newPage);
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+      const sortedRows = stableSort(rows, getComparator(order, orderBy));
+      const updatedRows = sortedRows.slice(
+        newPage * rowsPerPage,
+        newPage * rowsPerPage + rowsPerPage,
+      );
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setVisibleRows(updatedRows);
+
+      // Avoid a layout jump when reaching the last page with empty rows.
+      const numEmptyRows =
+        newPage > 0 ? Math.max(0, (1 + newPage) * rowsPerPage - rows.length) : 0;
+
+      const newPaddingHeight = (dense ? 33 : 53) * numEmptyRows;
+      setPaddingHeight(newPaddingHeight);
+    },
+    [order, orderBy, dense, rowsPerPage],
+  );
+
+  const handleChangeRowsPerPage = React.useCallback(
+    (event) => {
+      const updatedRowsPerPage = parseInt(event.target.value, 10);
+      setRowsPerPage(updatedRowsPerPage);
+
+      setPage(0);
+
+      const sortedRows = stableSort(rows, getComparator(order, orderBy));
+      const updatedRows = sortedRows.slice(
+        0 * updatedRowsPerPage,
+        0 * updatedRowsPerPage + updatedRowsPerPage,
+      );
+
+      setVisibleRows(updatedRows);
+
+      // There is no layout jump to handle on the first page.
+      setPaddingHeight(0);
+    },
+    [order, orderBy],
+  );
+
+  const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -353,51 +367,51 @@ export default function EnhancedTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {visibleRows
+                ? visibleRows.map((row, index) => {
+                    const isItemSelected = isSelected(row.name);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell padding="checkbox">
-                        <Switch
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.name)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.name}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
                       >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.calories}</TableCell>
+                        <TableCell align="right">{row.fat}</TableCell>
+                        <TableCell align="right">{row.carbs}</TableCell>
+                        <TableCell align="right">{row.protein}</TableCell>
+                      </TableRow>
+                    );
+                  })
+                : null}
+              {paddingHeight > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: paddingHeight,
                   }}
                 >
                   <TableCell colSpan={6} />
