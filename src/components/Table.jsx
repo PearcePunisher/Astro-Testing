@@ -49,7 +49,7 @@ const rows = [
 ];
 
 function hydrateRowsData(){
-
+  //the rows variable cannot be a const 
   //must connect to the DB
   // form the appropriate query
   //process response
