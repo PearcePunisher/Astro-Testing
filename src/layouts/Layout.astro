@@ -1,4 +1,22 @@
 ---
+import { ThemeOptions } from '@mui/material/styles';
+
+export const themeOptions: ThemeOptions = {
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#e32421',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+    background: {
+      default: '#272934',
+      paper: '#1f2129',
+    },
+  },
+};
+
 export interface Props {
 	title: string;
 }
