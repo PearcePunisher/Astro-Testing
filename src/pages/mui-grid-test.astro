@@ -11,33 +11,6 @@ import HomeGrid from '../components/HomeGrid.jsx';
 		<p class="instructions">
 			This is a completely experimental dashboard build for an internal client. The objective with this is to feed data to a custom <code>Wicked API</code> that will dynamically change the media attribution options on individual websites.
 		</p>
-		<ul role="list" class="link-card-grid">
-			<Card
-				href="https://docs.astro.build/"
-				title="Documentation"
-				body="Learn how Astro works and explore the official API docs."
-			/>
-			<Card
-				href="https://astro.build/integrations/"
-				title="Integrations"
-				body="Supercharge your project with new frameworks and libraries."
-			/>
-			<Card
-				href="https://astro.build/themes/"
-				title="Themes"
-				body="Explore a galaxy of community-built starter themes."
-			/>
-			<Card
-				href="../mui-grid-test"
-				title="View The Grid Test"
-				body="On this page I'm testing out the MUI Grid + Grid2 layout."
-			/>
-		</ul>
-		<div>
-		</div>
-		<div>
-		<Table client:load />
-		</div>
 		<div>
 			<HomeGrid client:load />
 		</div>
