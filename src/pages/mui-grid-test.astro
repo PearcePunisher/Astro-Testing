@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import Table from '../components/Table.jsx';
+import HomeGrid from '../components/HomeGrid.jsx';
 ---
 
 <Layout title="Grid Test">
@@ -36,6 +37,9 @@ import Table from '../components/Table.jsx';
 		</div>
 		<div>
 		<Table client:load />
+		</div>
+		<div>
+			<HomeGrid client:load />
 		</div>
 	</main>
 </Layout>
