@@ -1,3 +1,5 @@
+// Importing components from Material UI
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
@@ -22,12 +24,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
+// End of Material UI imports
+
 // Importing the theme
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { themeOptions } from '../themes/RTheme.ts';
 
 const theme = createTheme(themeOptions);
+
+// End of theme import
 
 function createData(name, calories, fat, carbs, protein) {
   return {
