@@ -10,7 +10,7 @@ export const themeOptions: ThemeOptions = {
       main: '#E3217F',
     },
     background: {
-      paper: '#1f2129',
+      paper: 'linear-gradient(45deg, rgba(227, 36, 33, 0.5), rgba(0, 0, 0, 0.5))',
       default: '#272934',
     },
     text: {
@@ -19,5 +19,15 @@ export const themeOptions: ThemeOptions = {
       disabled: '#777777',
     },
     divider: 'rgba(255,255,255,0.2)',
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          background: 'linear-gradient(135deg, rgba(227,36,33,0.5) 0%, rgba(29,31,33,0.8) 55%);',
+        },
+      },
+    },
   },
 };
