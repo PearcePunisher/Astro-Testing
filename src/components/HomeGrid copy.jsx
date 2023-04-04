@@ -1,5 +1,3 @@
-// original
-
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -33,6 +31,18 @@ const Item = styled(Paper)(({ theme }) => ({
 	textAlign: "center",
 	color: theme.palette.text.secondary,
 }));
+
+const ListTest = React.memo(({ data }) => {
+	return (
+		<List data={data} />
+	);
+});
+
+const Table = React.memo(({ data }) => {
+	return (
+		<Table data={data} />
+	);
+});
 
 export default function BasicGrid() {
 	return (
