@@ -21,3 +21,5 @@ _I haven't the slightest clue what I'm doing. I'm straight up winging this, so p
 [Tailwind CSS](https://tailwindcss.com/docs/installation)
 
 > _Tailwind is installed, but not in use as of Mar 27, 2023. Might change later._
+
+`sudo npm install && npm run dev` to fire up the local install
